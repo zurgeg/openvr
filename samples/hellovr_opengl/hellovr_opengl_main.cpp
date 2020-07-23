@@ -33,7 +33,7 @@
 #ifndef _countof
 #define _countof(x) (sizeof(x)/sizeof((x)[0]))
 #endif
-
+Vector3 offset2 = Vector3(0, 0, 0);
 void ThreadSleep( unsigned long nMilliseconds )
 {
 #if defined(_WIN32)
@@ -1212,14 +1212,14 @@ void CMainApplication::AddCubeToScene( Matrix4 mat, std::vector<float> &vertdata
 {
 	// Matrix4 mat( outermat.data() );
 
-	Vector4 A = mat * Vector4( 0, 0, 0, 1 );
-	Vector4 B = mat * Vector4( 1, 0, 0, 1 );
-	Vector4 C = mat * Vector4( 1, 1, 0, 1 );
-	Vector4 D = mat * Vector4( 0, 1, 0, 1 );
-	Vector4 E = mat * Vector4( 0, 0, 1, 1 );
-	Vector4 F = mat * Vector4( 1, 0, 1, 1 );
-	Vector4 G = mat * Vector4( 1, 1, 1, 1 );
-	Vector4 H = mat * Vector4( 0, 1, 1, 1 );
+	Vector4 A = mat * Vector4( offset2.x + 0, 0, 0, 1 );
+	Vector4 B = mat * Vector4( offset2.x + 1, 0, 0, 1 );
+	Vector4 C = mat * Vector4( offset2.x + 1, 1, 0, 1 );
+	Vector4 D = mat * Vector4( offset2.x + 0, 1, 0, 1 );
+	Vector4 E = mat * Vector4( offset2.x + 0, 0, 1, 1 );
+	Vector4 F = mat * Vector4( offset2.x + 1, 0, 1, 1 );
+	Vector4 G = mat * Vector4( offset2.x + 1, 1, 1, 1 );
+	Vector4 H = mat * Vector4( offset2.x + 0, 1, 1, 1 );
 
 	// triangles instead of quads
 	AddCubeVertex( E.x, E.y, E.z, 0, 1, vertdata ); //Front
@@ -1535,7 +1535,13 @@ void CMainApplication::RenderStereoTargets()
 // Purpose: Renders a scene with respect to nEye.
 //-----------------------------------------------------------------------------
 void CMainApplication::RenderScene( vr::Hmd_Eye nEye )
-{
+	
+{	
+
+	if (GetAsyncKeyState(0x43))
+	{
+		offset2.x++;
+	};
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
